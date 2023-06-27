@@ -1,0 +1,98 @@
+---
+title: "OLET 5606"
+author: "Christy Hung"
+date: "2023-06-26"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load library
+library(tidyverse) # piping `%>%`, plotting, reading dataset
+library(skimr) # exploratory data summary
+library(naniar) # exploratory plots
+library(kableExtra) # tables
+library(lubridate) # for date variables
+library(plotly)
+library(readr)
+```
+
+```{r}
+# load motor vehicle dataset
+motor_v = read_csv("Motor_Vehicle_Collisions_-_Crashes.csv")
+glimpse(motor_v) 
+
+```
+
+# quick overview of the data
+```{r}
+# data summary
+motor_v %>% skim()
+```
+
+# exploring missings
+```{r}
+vis_miss(motor_v, warn_large_data = FALSE)
+```
+
+# exploring numeric varibales
+```{r}
+motor_v %>%
+  select(where(is.numeric)) %>% # select column
+  pivot_longer(everything(), # select all variables
+               names_to = "Variable", # create new column
+               values_to = "Value") %>%
+  group_by(Variable) %>% 
+  summarise(Mean = mean(Value, na.rm = TRUE), # remove na data
+            Median = median(Value, na.rm = TRUE)) %>%
+  kable() %>% # putting into a table
+  kable_styling(bootstrap_options = c("hover")) # making table look good
+```
+
+```{r}
+motor_v %>% 
+  group_by(`CONTRIBUTING FACTOR VEHICLE 1`) %>% tally %>% arrange(desc(n))
+```
+
+
+```{r}
+motor_v %>%
+  mutate(injured = `NUMBER OF PERSONS INJURED` + `NUMBER OF PEDESTRIANS INJURED` + `NUMBER OF CYCLIST INJURED` + `NUMBER OF MOTORIST INJURED`) %>%
+  mutate(`NUMBER OF PERSONS KILLED` + `NUMBER OF PEDESTRIANS KILLED` + `NUMBER OF CYCLIST KILLED` + `NUMBER OF MOTORIST KILLED`)
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
