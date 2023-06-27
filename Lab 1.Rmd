@@ -25,14 +25,15 @@ library(readr)
 ```{r}
 # load motor vehicle dataset
 motor_v = read_csv("Motor_Vehicle_Collisions_-_Crashes.csv")
-glimpse(motor_v) 
 
 ```
 
 # quick overview of the data
 ```{r}
 # data summary
-motor_v %>% skim()
+motor_v %>% skim() 
+# alternativr
+glimpse(motor_v) # the structure and summary of the data
 ```
 
 # exploring missings
