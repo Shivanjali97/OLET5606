@@ -48,12 +48,13 @@ motor_v <- motor_v %>%
 motor_v %>%
   mutate(injured = `NUMBER OF PERSONS INJURED` + `NUMBER OF PEDESTRIANS INJURED` + `NUMBER OF CYCLIST INJURED` + `NUMBER OF MOTORIST INJURED`) %>%
   mutate(`NUMBER OF PERSONS KILLED` + `NUMBER OF PEDESTRIANS KILLED` + `NUMBER OF CYCLIST KILLED` + `NUMBER OF MOTORIST KILLED`)
-
 ```
 
 
 ```{r}
-
+# total number of injured per incident
+motor_v %>% 
+  group_by(injured) %>% tally 
 ```
 
 
