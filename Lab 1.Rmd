@@ -25,15 +25,14 @@ library(readr)
 ```{r}
 # load motor vehicle dataset
 motor_v = read_csv("Motor_Vehicle_Collisions_-_Crashes.csv")
+glimpse(motor_v) 
 
 ```
 
 # quick overview of the data
 ```{r}
 # data summary
-motor_v %>% skim() 
-# alternative
-glimpse(motor_v) # the structure and summary of the data
+motor_v %>% skim()
 ```
 
 # exploring missings
@@ -41,30 +40,50 @@ glimpse(motor_v) # the structure and summary of the data
 vis_miss(motor_v, warn_large_data = FALSE)
 ```
 
+# exploring numeric varibales
 ```{r}
-motor_v <- motor_v %>% 
-  group_by(`CONTRIBUTING FACTOR VEHICLE 1`) %>% tally %>% arrange(desc(n))
-# create two new coloumns - total injured and killed 
 motor_v %>%
-  mutate(injured = `NUMBER OF PERSONS INJURED` + `NUMBER OF PEDESTRIANS INJURED` + `NUMBER OF CYCLIST INJURED` + `NUMBER OF MOTORIST INJURED`) %>%
-  mutate(`NUMBER OF PERSONS KILLED` + `NUMBER OF PEDESTRIANS KILLED` + `NUMBER OF CYCLIST KILLED` + `NUMBER OF MOTORIST KILLED`)
+  select(where(is.numeric)) %>% # select column
+  pivot_longer(everything(), # select all variables
+               names_to = "Variable", # create new column
+               values_to = "Value") %>%
+  group_by(Variable) %>% 
+  summarise(Mean = mean(Value, na.rm = TRUE), # remove na data
+            Median = median(Value, na.rm = TRUE)) %>%
+  kable() %>% # putting into a table
+  kable_styling(bootstrap_options = c("hover")) # making table look good
 ```
 
-
 ```{r}
-# total number of injured per incident
 motor_v %>% 
-  group_by(injured) %>% tally 
+  group_by(`CONTRIBUTING FACTOR VEHICLE 1`) %>% tally %>% arrange(desc(n))
 ```
 
 
 ```{r}
-
+motor_v <- motor_v %>%
+  mutate(injured = `NUMBER OF PERSONS INJURED` + `NUMBER OF PEDESTRIANS INJURED` + `NUMBER OF CYCLIST INJURED` + `NUMBER OF MOTORIST INJURED`) %>%
+  mutate(killed = `NUMBER OF PERSONS KILLED` + `NUMBER OF PEDESTRIANS KILLED` + `NUMBER OF CYCLIST KILLED` + `NUMBER OF MOTORIST KILLED`) %>% 
+  mutate(Injury = as.factor(case_when(injured >= 1 ~ "Yes",
+                            TRUE ~ "No")),
+         Death = as.factor(case_when(killed >= 1 ~ "Yes",
+                                     TRUE ~ "No")))
 ```
 
 
 ```{r}
+motor_v %>% 
+  group_by(injured) %>% tally()
+```
 
+
+```{r}
+motor_v %>% 
+  group_by(`CONTRIBUTING FACTOR VEHICLE 1`, injured, killed) %>% tally() %>%
+  filter(`CONTRIBUTING FACTOR VEHICLE 1`)
+
+motor_v %>% 
+  mutate(Injured = case_when())
 ```
 
 
