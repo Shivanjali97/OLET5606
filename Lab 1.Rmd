@@ -32,7 +32,7 @@ motor_v = read_csv("Motor_Vehicle_Collisions_-_Crashes.csv")
 ```{r}
 # data summary
 motor_v %>% skim() 
-# alternativr
+# alternative
 glimpse(motor_v) # the structure and summary of the data
 ```
 
@@ -41,30 +41,19 @@ glimpse(motor_v) # the structure and summary of the data
 vis_miss(motor_v, warn_large_data = FALSE)
 ```
 
-# exploring numeric varibales
-```{r}
-motor_v %>%
-  select(where(is.numeric)) %>% # select column
-  pivot_longer(everything(), # select all variables
-               names_to = "Variable", # create new column
-               values_to = "Value") %>%
-  group_by(Variable) %>% 
-  summarise(Mean = mean(Value, na.rm = TRUE), # remove na data
-            Median = median(Value, na.rm = TRUE)) %>%
-  kable() %>% # putting into a table
-  kable_styling(bootstrap_options = c("hover")) # making table look good
-```
-
 ```{r}
 motor_v %>% 
   group_by(`CONTRIBUTING FACTOR VEHICLE 1`) %>% tally %>% arrange(desc(n))
+# create two new coloumns - total injured and killed 
+motor_v %>%
+  mutate(injured = `NUMBER OF PERSONS INJURED` + `NUMBER OF PEDESTRIANS INJURED` + `NUMBER OF CYCLIST INJURED` + `NUMBER OF MOTORIST INJURED`) %>%
+  mutate(`NUMBER OF PERSONS KILLED` + `NUMBER OF PEDESTRIANS KILLED` + `NUMBER OF CYCLIST KILLED` + `NUMBER OF MOTORIST KILLED`)
+
 ```
 
 
 ```{r}
-motor_v %>%
-  mutate(injured = `NUMBER OF PERSONS INJURED` + `NUMBER OF PEDESTRIANS INJURED` + `NUMBER OF CYCLIST INJURED` + `NUMBER OF MOTORIST INJURED`) %>%
-  mutate(`NUMBER OF PERSONS KILLED` + `NUMBER OF PEDESTRIANS KILLED` + `NUMBER OF CYCLIST KILLED` + `NUMBER OF MOTORIST KILLED`)
+
 ```
 
 
