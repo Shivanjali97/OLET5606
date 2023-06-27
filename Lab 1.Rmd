@@ -42,7 +42,7 @@ vis_miss(motor_v, warn_large_data = FALSE)
 ```
 
 ```{r}
-motor_v %>% 
+motor_v <- motor_v %>% 
   group_by(`CONTRIBUTING FACTOR VEHICLE 1`) %>% tally %>% arrange(desc(n))
 # create two new coloumns - total injured and killed 
 motor_v %>%
